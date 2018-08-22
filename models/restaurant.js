@@ -14,7 +14,7 @@
 };*/
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var Restaurant = sequelize.define('Restaurant', {
+  var Restaurant = sequelize.define('restaurant', {
     id:{
         type:  DataTypes.INTEGER,
         allowNull: false,
@@ -35,12 +35,12 @@ logo:{
 
 });
 
-Restaurant.associate = function(models) {
-  Restaurant.hasMany(models.Branch, {
-      foreignKey: 'restaurant_id',
-      as: 'restaurant_id',//as: 'todoItems' means that every time we query for a todo and include it's todo items, they'll be included under the key
-      // todoItems instead of TodoItems (Sequelize defaults to using the pluralized model name). 
-    });
-    };
+// Restaurant.associate = function(models) {
+//   Restaurant.hasMany(models.Branch, {
+//       foreignKey: 'restaurant_id',
+//       as: 'restaurant_id',//as: 'todoItems' means that every time we query for a todo and include it's todo items, they'll be included under the key
+//       // todoItems instead of TodoItems (Sequelize defaults to using the pluralized model name). 
+//     });
+//     };
   return Restaurant;
 };

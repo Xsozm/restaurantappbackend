@@ -1,6 +1,6 @@
-var express = require('express'),
-var  router = express.Router(),
-var models = require('../models'),
+var express = require('express');
+var  router = express.Router();
+var models = require('../models');
 //var Branch = sequelize.model('Branch');
 var BranchController = require('../controllers/BranchController');
 
@@ -66,9 +66,9 @@ var appRouter = function (app) {
         
     }
 //------------------------------------------------------------------------------
-router.get('/branch/searchRestaurant', BranchController.SearchRestasurant);
+app.get('/branch/searchRestaurant', BranchController.SearchRestasurant);
 
 
 }
 
-//module.exports = appRouter;
+module.exports = appRouter;

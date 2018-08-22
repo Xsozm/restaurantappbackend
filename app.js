@@ -6,23 +6,23 @@ var cors = require('cors');
 var app = express();
 var env = require('dotenv').load();
 
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize('project', 'root', 123456, {
-    host: 'localhost',
-    dialect: 'mysql',
-    operatorsAliases: false,
+// const Sequelize = require('sequelize');
+// const sequelize = new Sequelize('project', 'root', 123456, {
+//     host: 'localhost',
+//     dialect: 'mysql',
+//     operatorsAliases: false,
 
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
-    },
+//     pool: {
+//         max: 5,
+//         min: 0,
+//         acquire: 30000,
+//         idle: 10000
+//     },
 
 
-});
+// });
 
-sequelize.sync();
+// sequelize.sync();
 
 var server = app.listen(3232, function () {
     console.log("app running on port.", server.address().port);
@@ -50,11 +50,11 @@ app.use(
 
 
 
-app.use('/api', routes);
+// app.use('/api', routes);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.routes();
-routes(app);
+// app.routes();
+ routes(app);
 
 
 module.exports = app;

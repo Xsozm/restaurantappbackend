@@ -10,9 +10,10 @@ var Restaurant = require('../models').restaurant;
 module.exports=
 {
     SearchRestasurant: (req, res, next) => {
-        var qrcode = req.query.qrcode;
+        console.log("here", req.query["qrcode"]);
+        var qrcode = req.query["qrcode"];
         var arr = qrcode.split(" ");
-        var branchid = arr[0];
+        var branch_id = arr[0];
         var branch =  Branch.findOne({ "branchid": branch_id });
         if (branch) {
             return res.status(200).json({

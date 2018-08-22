@@ -1,6 +1,5 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var Branch = sequelize.define('Branch', {
+  var Branch = sequelize.define('branch', {
 latitude:{
     type:  DataTypes.DECIMAL,
     allowNull: false,
