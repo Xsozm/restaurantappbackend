@@ -1,45 +1,23 @@
 {
-
   "development": {
-
     "username": "root",
-
-    "password": null,
-
-    "database": "Hazem",
-
+    "password": 123456,
+    "database": "project",
     "host": "127.0.0.1",
-
     "dialect": "mysql"
-
   },
-
   "test": {
-
-    "username": "",
-
-    "password": null,
-
-    "database": "",
-
-    "host": "",
-
-    "dialect": "mysql"
-
-  },
-
-  "production": {
-
-    "username": "",
-
-    "password": null,
-
-    "database": "",
-
+    "username": "root",
+    "password": 123456,
+    "database": "project",
     "host": "127.0.0.1",
-
     "dialect": "mysql"
-
+  },
+  "production": {
+    "username": "root",
+    "password": 123456,
+    "database": "project",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
   }
-
 }

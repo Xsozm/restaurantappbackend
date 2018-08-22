@@ -1,3 +1,10 @@
+var express = require('express'),
+var  router = express.Router(),
+var models = require('../models'),
+//var Branch = sequelize.model('Branch');
+var BranchController = require('../controllers/BranchController');
+
+
 const jwt = require('jsonwebtoken');
 var appRouter = function (app) {
     app.get("/", function(req, res) {
@@ -17,6 +24,7 @@ var appRouter = function (app) {
            });
        });
     });
+
 
     app.post('/hazem',verifyToken,function (req,res) {
         var decoded = jwt.verify(req.token, 'lololo',function (err,authData) {
@@ -42,8 +50,7 @@ var appRouter = function (app) {
         });
 
 
-
-
+   
     //middle ware function
     function verifyToken(req,res,next) {
         const bearerheader = req.headers['authorization']
@@ -58,7 +65,10 @@ var appRouter = function (app) {
         }
         
     }
+//------------------------------------------------------------------------------
+router.get('/branch/searchRestaurant', BranchController.SearchRestasurant);
+
 
 }
 
-module.exports = appRouter;
+//module.exports = appRouter;
