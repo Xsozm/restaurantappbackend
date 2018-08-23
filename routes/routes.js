@@ -3,6 +3,7 @@ var  router = express.Router();
 var models = require('../models');
 //var Branch = sequelize.model('Branch');
 var BranchController = require('../controllers/BranchController');
+var ProductController = require('../controllers/ProductController');
 
 
 const jwt = require('jsonwebtoken');
@@ -68,6 +69,10 @@ var appRouter = function (app) {
 //------------------------------------------------------------------------------
 app.get('/branch/searchRestaurant', BranchController.SearchRestasurant);
 
+
+
+//-------------------------------------------------------------------------------
+app.get('/category/getProducts', ProductController.getProducts);
 
 }
 

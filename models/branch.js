@@ -23,7 +23,9 @@ restaurant_admin:{
 restaurant_id:{
       type: DataTypes.INTEGER,
       allowNull: false,
-  },});
+  },
+  timestamps: false
+});
 
 
   return Branch ;
