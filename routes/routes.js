@@ -4,6 +4,7 @@ var models = require('../models');
 //var Branch = sequelize.model('Branch');
 var BranchController = require('../controllers/BranchController');
 var ProductController = require('../controllers/ProductController');
+var CartController = require('../controllers/CartController');
 
 
 const jwt = require('jsonwebtoken');
@@ -73,6 +74,10 @@ app.get('/branch/searchRestaurant', BranchController.SearchRestasurant);
 
 //-------------------------------------------------------------------------------
 app.get('/category/getProducts', ProductController.getProducts);
+app.post('/cart/addProduct', CartController.addToCart);
+app.get('/cart/getProducts', CartController.getProductsInCart);
+app.patch('/cart/updateProducts', CartController.updateProductsInCart);
+
 
 }
 

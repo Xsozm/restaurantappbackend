@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     role_id: DataTypes.INTEGER,
   }, {});
   User.associate = function(models) {
-    // associations can be defined here
+    models.User.hasMany(models.Cart);
   };
   return User;
 };
