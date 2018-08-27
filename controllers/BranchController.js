@@ -13,18 +13,29 @@ module.exports=
         console.log("here", req.query["qrcode"]);
         var qrcode = req.query["qrcode"];
         var arr = qrcode.split(" ");
-        var branch_id = arr[0];
-        var branch =  Branch.findOne({ "branchid": branch_id });
-        if (branch) {
-            return res.status(200).json({
-                err: null,
-                data: branch,
-            });
-        }
-        else
-            return res.status(403).json({ error: "not found " });
+        global.globalBranchId = arr[0];    
+        global.globalTableNum= arr[1];
+        console.log("hi", globalBranchId,globalTableNum);
+        Branch.findOne({where: { "id": globalBranchId }}).then( branch=> {
+            if (!branch) {
+                return res
+                  .status(404)
+                  .json({ err: null, msg: 'branch not found', data: null });
+              }
         
-        },
+              //console.log(req.decodedToken.user._id);
+            res.status(200).json({
+                err: null,
+                msg: 'retaurant id retrieved successfully.',
+                data: branch.restaurant_id
+        
+              });
+            }).catch(err=>{
+                return next(err);
+            });
+            
+        
+        }    ,
 
 
         isLoggedIn : async (req, res, next) =>

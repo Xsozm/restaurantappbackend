@@ -5,7 +5,7 @@ let crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 
-/ authenticating sender email
+// authenticating sender email
 module.exports.login = function (req, res, next) {
     // Check that the body keys are in the expected format and the required fields are there
     var valid =

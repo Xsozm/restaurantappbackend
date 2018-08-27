@@ -7,13 +7,13 @@ module.exports = (sequelize, DataTypes) => {
     ProductId: DataTypes.INTEGER
   }, {});
    Cart.associate = function(models) {
-     models.Cart.belongsTo(models.User, {
+   /*  models.Cart.belongsTo(models.user, {
        onDelete: "CASCADE",
        foreignKey: {
          allowNull: false
-       }
+       },
      });
-
+*/
    };
   return Cart;
 };
