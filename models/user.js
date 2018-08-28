@@ -18,7 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     isVerified :DataTypes.BOOLEAN
   }, {});
   User.associate = function(models) {
-    models.User.hasMany(models.Cart);
+  //  models.User.hasMany(models.Cart);
+  //  models.User.hasMany(models.Order, { onDelete: 'CASCADE' });
+
   };
+  
   return User;
 };

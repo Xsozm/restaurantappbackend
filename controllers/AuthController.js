@@ -42,7 +42,6 @@ let  User = sequelize.define('user', {
 sequelize.sync();
 
 
-// authenticating sender email
 module.exports.login = function (req, res, next) {
     // Check that the body keys are in the expected format and the required fields are there
     var valid =

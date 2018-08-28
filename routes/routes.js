@@ -5,6 +5,7 @@ var models = require('../models');
 var BranchController = require('../controllers/BranchController');
 var ProductController = require('../controllers/ProductController');
 var CartController = require('../controllers/CartController');
+var OrderController = require('../controllers/OrderController');
 var auth = require('../controllers/AuthController');
 const jwt = require('jsonwebtoken');
 
@@ -109,6 +110,10 @@ app.post('/cart/addProduct', CartController.addToCart);
 app.get('/cart/getProducts', CartController.getProductsInCart);
 app.patch('/cart/updateProducts', CartController.updateProductsInCart);
 
+
+//-------------------------------------------------------------------------------
+app.post('/order/addOrder', OrderController.addOrder);
+app.get('/order/getOrders', OrderController.getOrdersOfUser);
 
 }
 

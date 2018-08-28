@@ -5,7 +5,9 @@ var Product = require('../models').product;
 module.exports=
 {
     addToCart:(req, res, next) => {
-        Cart.create({ description: req.query["description"], quantity: 1, UserId: 1, ProductId: req.query["productId"] }).then(product => {
+        console.log(req.body.description);
+        console.log(req.body.productId);
+        Cart.create({ description: req.body.description, quantity: 1, UserId: 1, ProductId: req.body.productId }).then(product => {
             res.status(200).json({
                 err: null,
                 msg: 'Product is added to your cart successfully.',
@@ -52,7 +54,8 @@ module.exports=
                 },
                updateProductsInCart: (req, res, next) => {
                     var userId = 1; //to be changed with authorized user
-                    var productId = req.query["ProductId"];
+                    var productId = req.body.ProductId;
+                    console.log(req.body.ProductId,req.body.quantity,req.body.description);
                     Cart.findOne({
                         where: {
                             UserId: userId,
@@ -69,8 +72,8 @@ module.exports=
                           //console.log(req.decodedToken.user._id);
                           
                           product.update({
-                            quantity: req.query["quantity"],
-                            description: req.query["description"]
+                            quantity: req.body.quantity,
+                            description: req.body.description
                           }).then(() => {
                             res.status(200).json({
                                 err: null,
