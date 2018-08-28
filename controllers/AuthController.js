@@ -1,6 +1,7 @@
 let Validations = require('../utils/Validation');
 let Encryption = require('../utils/Encryption');
 let EMAIL_REGEX = require('../utils/Email').EMAIL_REGEX;
+let nodemailerController = require('./nodemailer.controller');
 let crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const Sequelize = require('sequelize');
@@ -24,6 +25,7 @@ let  User = sequelize.define('user', {
 
         type: Sequelize.INTEGER,
         primaryKey: true,
+        autoIncrement: true
 
     },
     name: Sequelize.STRING,
@@ -34,7 +36,26 @@ let  User = sequelize.define('user', {
     },
     password: Sequelize.STRING,
     role_id: Sequelize.INTEGER,
-    isVerified :Sequelize.BOOLEAN
+    isVerified :{type:Sequelize.BOOLEAN,
+        default:false}
+}, {
+    timestamps:false
+});
+
+let  Verify = sequelize.define('verifie', {
+    id:{
+
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+
+
+    },
+    token: Sequelize.STRING,
+    user_id: {
+        type:Sequelize.INTEGER,
+
+    }
 }, {
     timestamps:false
 });
@@ -42,6 +63,8 @@ let  User = sequelize.define('user', {
 sequelize.sync();
 
 
+
+// authenticating sender email
 module.exports.login = function (req, res, next) {
     // Check that the body keys are in the expected format and the required fields are there
     var valid =
@@ -108,7 +131,8 @@ module.exports.login = function (req, res, next) {
 ///////////////////////////////////
 //the function that register users to the database
 module.exports.signup = function (req, res, next) {
-    var valid = req.body.username && Validations.isString(req.body.username) &&
+
+    var valid = req.body.name && Validations.isString(req.body.name) &&
         req.body.password && Validations.isString(req.body.password) &&
         req.body.email && Validations.isString(req.body.email) && Validations.matchesRegex(req.body.email, EMAIL_REGEX);
     if (!valid) {
@@ -118,36 +142,36 @@ module.exports.signup = function (req, res, next) {
             data: null
         });
     }
-    req.body.username = req.body.username.trim().replace(/\s+/g, '-');
-    User.findOne({ $or: [{ username: { $eq: req.body.username } }, { email: { $eq: req.body.email.trim().toLowerCase() } }] }, function (err, user) {
-        if (err)
-            throw err;
+
+    req.body.name = req.body.name.trim().replace(/\s+/g, '-');
+    User.findOne({ where: {email: req.body.email} }).then(user=> {
+
         if (user == null) {
             var password = req.body.password.trim();
             Encryption.hashPassword(password, function (err, hash) {
                 if (err) {
                     return next(err);
                 }
-                User.create({ name: req.body.name, email: req.body.email.trim().toLowerCase(), password: hash }, function (err, newUser) {
-                    if (err) {
-                        return next(err);
-                    } else {
-                        var token = jwt.sign(
-                            {
-                                user: {
-                                    id: newUser.id, email: newUser.email
-                                }
-                            },
-                            'lol',
-                            {
-                                expiresIn: '2h'
+                User.create({ name: req.body.name, email: req.body.email.trim().toLowerCase(), password: hash }).then(newUser=>{
+
+
+                    var token = jwt.sign(
+                        {
+                            user: {
+                                id: newUser.id, email: newUser.email
                             }
-                        );
-                        //insert in verify token tables
-                        // here
-                        //
+                        },
+                        'lol',
+                        {
+                            expiresIn: '2h'
+                        }
+                    );
+
+                    const verify = Verify.build({token: token,user_id:newUser.id});
+                    verify.save().then(() => {
+
                         // Confirmation url which will be sent to user
-                        let confirmationUrl = 'https://whatwhynot.net/#/page' + `/verify/${token}`;
+                        let confirmationUrl = 'http://127.0.0.1:3000/' + `auth/verify/${token}`;
                         nodemailerController.sendEmail(
                             req.body.email,
                             'Account Verification Token',
@@ -160,25 +184,31 @@ module.exports.signup = function (req, res, next) {
                                         data: null
                                     });
                                 } else {
-                                    User.remove({ _id: newUser._id }, function (err) {
-                                        if (!err) {
-                                            return res.status(412).json({
-                                                err: null,
-                                                msg: 'Registration Failed',
-                                                data: null
-                                            })
-                                        }
+                                    User.destroy({where:{ email:req.body.email} }).then(user=> {
+
+                                        return res.status(412).json({
+                                            err: null,
+                                            msg: 'Registration Failed',
+                                            data: null
+                                        })
+
                                     })
                                 }
                             }
                         )
-                    }
+
+                    })
+                    //insert in verify token tables
+                    // here
+                    //
+
+
                 });
             });
         } else
             return res.status(412).json({
                 err: null,
-                msg: 'Registration Failed',
+                msg: 'Registration Failed , This user already Exists',
                 data: null
             })
     })
@@ -188,6 +218,7 @@ module.exports.signup = function (req, res, next) {
 /////////////////////////
 
 module.exports.verify = function (req, res, next) {
+
     // finds a user with verification token appended to the url url
     var valid = req.params.token && Validations.isString(req.params.token);
     if (valid) {
@@ -199,72 +230,29 @@ module.exports.verify = function (req, res, next) {
                     data: null
                 });
             }
-            switch (decodedToken.user.verify) {
-                case "Email":
-                    User.findOneAndUpdate({ _id: decodedToken.user._id, verificationEmailToken: decodedToken.user.token },
-                        { $set: { email: decodedToken.user.email }, $unset: { verificationEmailToken: 1 } },
-                        { new: false }, function (err, user) {
-                            if (user) {
-                                return res.status(200).json({
-                                    err: null,
-                                    msg: user.email + ' Updated to ' + decodedToken.user.email,
-                                    data: null
-                                })
-                            } else {
-                                return res.status(200).json({
-                                    err: null,
-                                    msg: ' Unable to Verify Email ' + decodedToken.user.email,
-                                    data: null
-                                })
-                            }
+            var id = decodedToken.user.id;
+            User.findOne({ where: {id: id} }).then(user =>
+            {
+                user.update({
+                    isVerified: true
+                }).then(() => {
+
+                    Verify.findOne({where: {user_id: id}}).then(verify => {
+                        verify.destroy().then(function () {
+                            return res.status(200).json({
+                                err: null,
+                                msg: 'Activated Successully ',
+                                data: null
+                            })
                         })
-                    break;
-                case "Account":
-                    User.findOneAndUpdate({ _id: decodedToken.user._id, verificationToken: decodedToken.user.token },
-                        { $set: { isVerified: true }, $unset: { verificationToken: 1 } }, { new: true }, function (err, user) {
-                            if (user) {
-                                return res.status(200).json({
-                                    err: null,
-                                    msg: user.username + ' Account is now Verified ',
-                                    data: null
-                                })
-                            } else {
-                                return res.status(200).json({
-                                    err: null,
-                                    msg: ' Unable to Verify Account ' + decodedToken.user.email,
-                                    data: null
-                                })
-                            }
-                        })
-                    break;
-                case "Password":
-                    Encryption.hashPassword(decodedToken.user.token, function (err, hash) {
-                        if (hash) {
-                            User.findByIdAndUpdate(decodedToken.user._id, { $set: { password: hash } }, function (err, user) {
-                                if (user) {
-                                    return res.status(200).json({
-                                        err: null,
-                                        msg: 'User ' + user.username + ' Password Reseted Successfully',
-                                        data: null
-                                    })
-                                } else {
-                                    return res.status(404).json({
-                                        err: null,
-                                        msg: 'Unable To Find User',
-                                        data: null
-                                    })
-                                }
-                            });
-                        }
                     });
-                    break;
-            }
+
+                });
+
+
+            })
         });
-    } else {
-        return res.status(422).json({
-            err: null,
-            msg: 'Invalid Data.',
-            data: null
-        })
     }
 };
+
+
