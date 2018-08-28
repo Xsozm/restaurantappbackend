@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f067f63f-dcf9-4830-8072-d4d87012afaa" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/controllers/AuthController.js" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/AuthController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/controllers/nodemailer.controller.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,13 +22,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AuthController.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AuthController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controllers/AuthController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="516">
-              <caret line="258" lean-forward="true" selection-start-line="258" selection-end-line="258" />
+            <state relative-caret-position="4246">
+              <caret line="193" selection-start-line="193" selection-end-line="193" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="nodemailer.controller.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/controllers/nodemailer.controller.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="484">
+              <caret line="22" column="1" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BranchController.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/controllers/BranchController.js">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file leaf-file-name="cart.js" pinned="false" current-in-tab="false">
@@ -111,6 +125,7 @@
         <option value="$PROJECT_DIR$/models/user.js" />
         <option value="$PROJECT_DIR$/models/cart.js" />
         <option value="$PROJECT_DIR$/controllers/AuthController.js" />
+        <option value="$PROJECT_DIR$/controllers/nodemailer.controller.js" />
       </list>
     </option>
   </component>
@@ -218,7 +233,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21047000" />
+    <option name="totallyTimeSpent" value="21066000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
@@ -230,8 +245,8 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info id="npm" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.355042" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19292426" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.355042" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19292426" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -403,7 +418,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controllers/nodemailer.controller.js" />
     <entry file="file://$PROJECT_DIR$/routes/routes.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
@@ -450,11 +464,7 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/BranchController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret lean-forward="true" />
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/utils/Validation.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -588,8 +598,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/controllers/AuthController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
-          <caret line="258" lean-forward="true" selection-start-line="258" selection-end-line="258" />
+        <state relative-caret-position="4246">
+          <caret line="193" selection-start-line="193" selection-end-line="193" />
         </state>
       </provider>
     </entry>
@@ -597,6 +607,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
           <caret line="18" column="5" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controllers/nodemailer.controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="22" column="1" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
         </state>
       </provider>
     </entry>
