@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var User = sequelize.define('User', {
+  var User = sequelize.define('user', {
     id:{
 
     type: DataTypes.INTEGER,
@@ -8,9 +8,14 @@ module.exports = (sequelize, DataTypes) => {
   
   },
     name: DataTypes.STRING,
-    mail: DataTypes.STRING,
+    email: {
+      type:DataTypes.STRING,
+        unique:true,
+        allowNull:false
+    },
     password: DataTypes.STRING,
     role_id: DataTypes.INTEGER,
+    isVerified :DataTypes.BOOLEAN
   }, {});
   User.associate = function(models) {
     models.User.hasMany(models.Cart);

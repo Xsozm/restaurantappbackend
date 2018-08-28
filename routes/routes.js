@@ -79,7 +79,7 @@ var appRouter = function (app) {
             });
         }
         // Verify that the JWT is created using our server secret and that it hasn't expired yet
-        jwt.verify(token, "secret", function (err, decodedToken) {
+        jwt.verify(token, "lol", function (err, decodedToken) {
             if (err) {
                 return res.status(401).json({
                     error: err,
@@ -93,9 +93,9 @@ var appRouter = function (app) {
     };
 
 //---------------------
-    router.post('/auth/login', isNotAuthenticated, auth.login);
-    router.post('/auth/signup', isNotAuthenticated, auth.signup);
-    router.get('/auth/verify/:token', isNotAuthenticated, auth.verify);
+    app.post('/auth/login', isNotAuthenticated, auth.login);
+    app.post('/auth/signup', isNotAuthenticated, auth.signup);
+    app.get('/auth/verify/:token', isNotAuthenticated, auth.verify);
 
 
 //------------------------------------------------------------------------------

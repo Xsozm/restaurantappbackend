@@ -3,9 +3,46 @@ let Encryption = require('../utils/Encryption');
 let EMAIL_REGEX = require('../utils/Email').EMAIL_REGEX;
 let crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize('Hazem', 'root', '', {
+    host: 'localhost',
+    dialect: 'mysql',
+    operatorsAliases: false,
+
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+    },
 
 
-/ authenticating sender email
+});
+
+let  User = sequelize.define('user', {
+    id:{
+
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+
+    },
+    name: Sequelize.STRING,
+    email: {
+        type:Sequelize.STRING,
+        unique:true,
+        allowNull:false
+    },
+    password: Sequelize.STRING,
+    role_id: Sequelize.INTEGER,
+    isVerified :Sequelize.BOOLEAN
+}, {
+    timestamps:false
+});
+
+sequelize.sync();
+
+
+// authenticating sender email
 module.exports.login = function (req, res, next) {
     // Check that the body keys are in the expected format and the required fields are there
     var valid =
@@ -24,11 +61,12 @@ module.exports.login = function (req, res, next) {
     }
 
     // Find the user with this email from the database
-    User.findOne({ email: req.body.email.trim().toLowerCase(), }, { _id: 1, username: 1, email: 1, password: 1, blocked: 1, isVerified: 1, role: 1 }).exec(function (err, user) {
-        if (err) {
-            return next(err);
-        }
+    User.findOne({ where: {email: req.body.email} }).then(user => {
+        // if (err) {
+        //     return next(err);
+        // }
         // If user not found then he/she is not registered
+        console.log(user);
         if (!user) {
             return res
                 .status(404)
@@ -46,23 +84,23 @@ module.exports.login = function (req, res, next) {
                     .status(401)
                     .json({ err: null, msg: 'Password is incorrect.', data: null });
             }
-            if (user.blocked) {
-                return res.status(401).json({ err: null, msg: 'Blocked', data: null });
-            }
+            // if (user.blocked) {
+            //     return res.status(401).json({ err: null, msg: 'Blocked', data: null });
+            // }
             if (!user.isVerified) {
                 return res.status(401).json({ err: null, msg: ' Please Verify Your Account ', data: null });
             }
             // Create a JWT and put in it the user object from the database
             var token = jwt.sign(
                 {
-                    user: { _id: user._id, username: user.username, email: user.email, role: user.role }
+                    user: { id: user.id, name: user.name, email: user.email }
                 },
-                req.app.get('secret'),
+                'lol',
                 {
                     expiresIn: '12h'
                 }
             );
-            res.status(200).json({ err: null, msg: 'Welcome', data: token });
+            res.status(200).json({ err: null, msg: 'Welcome', Token: token });
         });
     });
 };
@@ -91,22 +129,24 @@ module.exports.signup = function (req, res, next) {
                 if (err) {
                     return next(err);
                 }
-                User.create({ username: req.body.username, email: req.body.email.trim().toLowerCase(), password: hash, verificationToken: crypto.randomBytes(16).toString('hex') }, function (err, newUser) {
+                User.create({ name: req.body.name, email: req.body.email.trim().toLowerCase(), password: hash }, function (err, newUser) {
                     if (err) {
                         return next(err);
                     } else {
                         var token = jwt.sign(
                             {
                                 user: {
-                                    _id: newUser._id, email: newUser.email, verify: "Account",
-                                    token: newUser.verificationToken
+                                    id: newUser.id, email: newUser.email
                                 }
                             },
-                            req.app.get('secret'),
+                            'lol',
                             {
                                 expiresIn: '2h'
                             }
                         );
+                        //insert in verify token tables
+                        // here
+                        //
                         // Confirmation url which will be sent to user
                         let confirmationUrl = 'https://whatwhynot.net/#/page' + `/verify/${token}`;
                         nodemailerController.sendEmail(
@@ -152,7 +192,7 @@ module.exports.verify = function (req, res, next) {
     // finds a user with verification token appended to the url url
     var valid = req.params.token && Validations.isString(req.params.token);
     if (valid) {
-        jwt.verify(req.params.token, req.app.get('secret'), function (err, decodedToken) {
+        jwt.verify(req.params.token, 'lol', function (err, decodedToken) {
             if (err) {
                 return res.status(401).json({
                     error: err,

@@ -6,25 +6,33 @@ var cors = require('cors');
 var app = express();
 var env = require('dotenv').load();
 
-// const Sequelize = require('sequelize');
-// const sequelize = new Sequelize('project', 'root', 123456, {
-//     host: 'localhost',
-//     dialect: 'mysql',
-//     operatorsAliases: false,
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize('Hazem', 'root', '', {
+    host: 'localhost',
+    dialect: 'mysql',
+    operatorsAliases: false,
 
-//     pool: {
-//         max: 5,
-//         min: 0,
-//         acquire: 30000,
-//         idle: 10000
-//     },
+    pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+    },
 
 
-// });
+});
 
-// sequelize.sync();
+sequelize.sync();
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
+    })
+    .catch(err => {
+        console.error('Unable to connect to the database:', err);
+    });
 
-var server = app.listen(3232, function () {
+var server = app.listen(3000, function () {
     console.log("app running on port.", server.address().port);
 });
 
